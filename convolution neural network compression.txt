@@ -1,0 +1,112 @@
+1.	Network Compression:
+•	Fixed-precision training and storage
+•	Sparsity regularizers & Pruning
+•	Tensor Decomposition
+
+Sparsity regularizers & Pruning
+-------------------------------------------------------------------------------------------------------
+Paper name: “Learning Structured Sparsity in Deep Neural Networks”  
+Training algorithms for efficient inference, Structurally sparse DNNs (NIPS 2016)
+影片: https://www.youtube.com/watch?v=IslYfqd70o4
+Slide: https://github.com/wenwei202/caffe/blob/scnn/docs/WEN_NIPS2016.pdf
+作者的code: https://github.com/wenwei202/caffe/tree/scnn
+這篇文章認為之前的Random sparsity在硬體上是不好的，必須要有structured sparsity，這篇文章提出了一個數學方法(Structure Sparsity Learning)在training的過程來使用，主要的結果是加速整個運算，下圖是跟之前使用L1的結果來比較
+ 
+
+
+Paper name: “Deep Compression: Compressing Deep Neural Networks with Pruning, Trained Quantization and Huffman Coding” 
+(Stanford University, Tsinghua University, 2016 ICLR)
+
+
+Paper name: “DSD: DENSE-SPARSE-DENSE TRAINING FOR DEEP NEURAL NETWORKS” (2017 ICLR)
+ 
+
+這一篇的重點是 train a dense network to learn connection weights and importance. In the S (Sparse) step, we regularize the network by pruning the unimportant connections with small weights and retraining the network given the sparsity constraint. In the final D (re-Dense) step, we increase the model capacity by removing the sparsity constraint, re-initialize the pruned parameters from zero and retrain the whole dense network.
+實驗結果可以降低top1 error
+ 
+甚至可以提升DeepSpeech的結果
+
+
+Paper name: “Dropout: A Simple Way to Prevent Neural Networks from Overfitting”
+Dropout [Hinton 2012]
+
+
+
+
+
+
+Tensor Decomposition
+-------------------------------------------------------------------------------------------------------
+Lower-ranks DNNs(ICCV2017)
+Paper name: “Coordinating Filters for Faster Deep Neural Networks ”
+Code: https://github.com/wenwei202/caffe
+有跟韓國三星那一篇(one-shot)與Learning Structured Sparsity in Deep Neural(SSL)做速度的比較，都比他們快
+Table 6 compares our method with state-of-the-art DNN acceleration methods, in CPU mode
+ 
+
+Paper name: “Compression of Deep Convolutional Neural Networks for Fast and Low Power Mobile Applications”. (Samsung, etc)
+”
+用SVD分解weight來進行加速
+
+
+Fixed-precision training and storage
+-------------------------------------------------------------------------------------------------------
+Paper name: “Trained ternary quantization”(arXiv 2017)
+
+Paper name: “Weighted-Entropy-based Quantization for Deep Neural Networks” (CVPR_2017)
+提出了一個Weight Quantization 的方法，而且可以用多個bit，提供一個調整bit與accuracy的方式 
+Unlike recent work on binary-weight neural networks, our approach is multi-bit quantization, in which weights and activations can be quantized by any number of bits depending on the target accuracy.
+WQ(x, y), x 代表weight的用幾個bit, y代表input要用幾個bit
+
+
+
+
+WQ代表這篇paper的方法，可以發現top-1accuracy都比XNOR-NET高，而且配合Deep Compression 的方法，Weights 只需要8.3MB，比單獨使用Deep Compression 8.9MB 還要來的低
+
+Paper name: “How to Train a Compact Binary Neural Network with High Accuracy”
+對於accuracy提供了方法來調整: low learning rate, PReLU, regularization, multiple binarize, expanding lower layer
+
+對於Comp. rate: 二質化最後一層並在將output送入softmax 之前加上一個scalar layer
+ 
+
+Paper name: ” XNOR-Net ImageNet Classification Using Binary Convolutional Neural Networks”
+ 
+
+                           更動CNN架構
+-------------------------------------------------------------------------------------------------------
+
+Paper name: “Going Deeper with convolutions”
+Inception Modules, GoogLenet
+
+Paper name: “SqueezeNet: AlexNet-level accuracy with 50x fewer parameters and <0.5MB model size”
+Replace as many 3x3filters as possible with 1x1 filters, 達到50x的壓縮效果
+ 
+ 
+
+Paper name: “Aggregated Residual Transformations for Deep Neural Networks”
+ResNeXt
+改良過的ResNet，accuracy 明顯提升
+ 
+
+Paper name: “Netwok in netwok” (NIN) 2014 ICLR
+“How to Train a Compact Binary Neural Network with High Accuracy” 有用到這方法，配合本身的方法可以壓縮到186倍。
+NIN的方法是改良本來CNN的架構
+ 
+好處是提高accuracy減少記憶體的使用空間
+ 
+2.	Library optimization: 
+Paper name: “fast algorithm for convolutional neural network” 
+1.	Limitation : useful only for 3x3 convolution
+2.	# multiplication are reduced at the cost of more additions  
+3.	Adopted in cuDNN v5
+
+Paper name: “MEC: Memory-efficient Convolution for Deep Neural Network”
+1.	Data duplication is mitigated 
+2.	https://d.cosx.org/d/419333-mec
+說明convolution可以有效的被運算，但是tensorflow包住?
+
+
+下面的網址是網路資源
+https://www.ctolib.com/ZhishengWang-Embedded-Neural-Network.html
+https://github.com/robertsdionne/neural-network-papers#convolutional-neural-networks
+
